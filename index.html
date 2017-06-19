@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-br" ng-app="index">
+<head>
+    <meta charset="UTF-8">
+    <title>Locadora</title>
+    <link rel="stylesheet" href="components/bootstrap-3.3.7-dist/css/bootstrap.css">
+    <link rel="stylesheet" href="css/estilo.css">
+    <script src="components/bootstrap-3.3.7-dist/js/bootstrap.js"></script>
+    <script src="components/jquery-3.2.1/jquery.js"></script>
+    <script src="scripts/angular.js"></script>
+
+    <script>
+        angular.module("index", []);
+        angular.module("index").controller("ListaFilmesCtrl", function ($scope) {
+            $scope.app = "Cadastro de Filmes";
+            $scope.filmes = [];
+            $scope.generos = [
+                {nome: "Ação"},
+                {nome: "Suspense"},
+                {nome: "Comédia"},
+                {nome: "Aventura"}
+            ];
+            $scope.classificacoes = [
+                {categoria: "Livre"},
+                {categoria: "10 Anos"},
+                {categoria: "12 Anos"},
+                {categoria: "14 Anos"},
+                {categoria: "16 Anos"},
+                {categoria: "18 Anos"}
+            ];
+
+            $scope.inserirFilme = function (filme) {
+                $scope.filmes.push(angular.copy(filme));
+                delete $scope.filme;
+            };
+
+            $scope.colorHead = {
+                'background-color': '#eee',
+            };
+            $scope.colorLine = {
+                'background-color': '#a6a6a6',
+                'font-size': '14px',
+                'color': '#c6442a',
+                'font-weight': 'bold'
+            };
+
+        });
+    </script>
+</head>
+<body style="background-color: #788389;">
+<header>
+    <div class="container-fluid" ng-controller="ListaFilmesCtrl">
+        <div class="row">
+            <img src="images/banner.jpg" title="Banner" class="img-responsive" style="width: 100%;">
+        </div>
+
+        <div class="row">
+            <h3 class="text-center" style="color: #fff">{{app}}</h3>
+            <div class="jumbotron">
+                <div class="col-md-offset-4 col-md-4">
+                    <form class="form-horizontal" name="formFilme">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Nome</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="txtNome" ng-model="filme.nome">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Gênero</label>
+                            <div class="col-sm-10">
+                                <select ng-model="filme.genero" ng-options="genero.nome for genero in generos" class="form-control">
+                                    <option value="">Selecione o Gênero</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Classificação</label>
+                            <div class="col-sm-offset-1 col-sm-10" ng-repeat="classificacao in classificacoes">
+                                <div class="checkbox">
+                                    <label>
+                                        <input name="classificacao" type="radio" value="{{classificacao.categoria}}" ng-model="filme.classificacao"> {{classificacao.categoria}}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <input type="button" class="btn btn-primary" value="Inserir" ng-click="inserirFilme(filme)">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <table class="table table-bordered" ng-if="filmes.length > 0">
+                    <thead>
+                    <tr ng-style="colorHead">
+                        <th>Nome</th>
+                        <th>Gênero</th>
+                        <th>Classificação</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr ng-repeat="filme in filmes" ng-style="colorLine">
+                        <td>{{filme.nome}}</td>
+                        <td>{{filme.genero.nome}}</td>
+                        <td>{{filme.classificacao}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</header>
+</body>
+</html>
