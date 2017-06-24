@@ -34,6 +34,11 @@
                 delete $scope.filme;
             };
 
+            $scope.removerFilme = function (filme) {
+              var index = $scope.filmes.indexOf(filme);
+              $scope.filmes.splice(index, 1);
+            };
+
             $scope.colorHead = {
                 'background-color': '#eee',
             };
@@ -42,6 +47,12 @@
                 'font-size': '14px',
                 'color': '#c6442a',
                 'font-weight': 'bold'
+            };
+
+            $scope.isFilmeSelecionado = function (filmes) {
+              return filmes.some(function (filme) {
+                  return filme.filmeSelecionados;
+              });
             };
 
         });
@@ -104,6 +115,7 @@
                 <table class="table table-bordered" ng-if="filmes.length > 0">
                     <thead>
                     <tr ng-style="colorHead">
+                        <th><input type="checkbox" ng-model="filmeSelecionados"></th>
                         <th>Nome</th>
                         <th>Gênero</th>
                         <th>Classificação</th>
@@ -112,12 +124,15 @@
 
                     <tbody>
                     <tr ng-repeat="filme in filmes | filter : buscaFilme" ng-style="colorLine">
+                        <td><input type="checkbox" ng-checked="filmeSelecionados"></td>
                         <td>{{filme.nome}}</td>
                         <td>{{filme.genero.nome}}</td>
                         <td>{{filme.classificacao}}</td>
+                        <td><button type="button" class="btn btn-danger" ng-click="removerFilme(filme)">Excluir</button> </td>
                     </tr>
                     </tbody>
                 </table>
+                <button type="button" class="btn btn-primary" ng-if="isFilmeSelecionado(filmes)">Excluir Todos</button>
             </div>
         </div>
     </div>
