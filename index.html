@@ -11,9 +11,10 @@
 
     <script>
         angular.module("index", []);
-        angular.module("index").controller("ListaFilmesCtrl", function ($scope, $filter) {
+        angular.module("index").controller("ListaFilmesCtrl", function ($scope) {
             $scope.app = "Cadastro de Filmes";
             $scope.filmes = [];
+
             $scope.generos = [
                 {nome: "Ação"},
                 {nome: "Suspense"},
@@ -29,8 +30,10 @@
                 {categoria: "18 Anos"}
             ];
 
+            $scope.data = new Date();
             $scope.inserirFilme = function (filme) {
                 $scope.filmes.push(angular.copy(filme));
+                $scope.Date = new Date();
                 delete $scope.filme;
             };
 
@@ -50,10 +53,16 @@
             };
 
             $scope.isFilmeSelecionado = function (filmes) {
-              return filmes.some(function (filme) {
-                  return filme.filmeSelecionados;
+              return filmes.some(function () {
+                  return filmes.selecionados;
               });
             };
+
+            $scope.removerTodos = function (filmes) {
+                $scope.filmes = filmes.filter(function () {
+                   if(!filmes.selecionados) return filmes;
+                });
+            }
 
         });
     </script>
@@ -115,24 +124,26 @@
                 <table class="table table-bordered" ng-if="filmes.length > 0">
                     <thead>
                     <tr ng-style="colorHead">
-                        <th><input type="checkbox" ng-model="filmeSelecionados"></th>
+                        <th><input type="checkbox" ng-model="filmes.selecionados"></th>
                         <th>Nome</th>
                         <th>Gênero</th>
                         <th>Classificação</th>
+                        <th>Data</th>
                     </tr>
                     </thead>
 
                     <tbody>
-                    <tr ng-repeat="filme in filmes | filter : buscaFilme" ng-style="colorLine">
-                        <td><input type="checkbox" ng-checked="filmeSelecionados"></td>
+                    <tr ng-repeat="filme in filmes | filter : buscaFilme" ng-style="colorLine" ng-init="datetime = Date">
+                        <td><input type="checkbox" ng-checked="filmes.selecionados"></td>
                         <td>{{filme.nome}}</td>
                         <td>{{filme.genero.nome}}</td>
                         <td>{{filme.classificacao}}</td>
+                        <td>{{datetime | date: 'dd/MM/yyyy HH:mm'}}</td>
                         <td><button type="button" class="btn btn-danger" ng-click="removerFilme(filme)">Excluir</button> </td>
                     </tr>
                     </tbody>
                 </table>
-                <button type="button" class="btn btn-primary" ng-if="isFilmeSelecionado(filmes)">Excluir Todos</button>
+                <button type="button" class="btn btn-primary" ng-if="isFilmeSelecionado(filmes)" ng-click="removerTodos(filmes)">Excluir Todos</button>
             </div>
         </div>
     </div>
