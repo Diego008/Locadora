@@ -8,11 +8,12 @@
     <script src="components/bootstrap-3.3.7-dist/js/bootstrap.js"></script>
     <script src="components/jquery-3.2.1/jquery.js"></script>
     <script src="scripts/angular.js"></script>
+    <script src="scripts/dirPagination.js"></script>
 
     <script>
-        angular.module("index", []);
+        angular.module("index", ['angularUtils.directives.dirPagination']);
         angular.module("index").controller("ListaFilmesCtrl", function ($scope) {
-            $scope.app = "Cadastro de Filmes";
+            $scope.titulo = "Cadastro de Filmes";
             $scope.filmes = [];
 
             $scope.generos = [
@@ -75,7 +76,7 @@
         </div>
 
         <div class="row">
-            <h3 class="text-center" style="color: #fff">{{app}}</h3>
+            <h3 class="text-center" style="color: #fff">{{titulo}}</h3>
             <div class="jumbotron">
                 <div class="col-md-offset-4 col-md-4">
                     <form class="form-horizontal" name="formFilme">
@@ -133,7 +134,7 @@
                     </thead>
 
                     <tbody>
-                    <tr ng-repeat="filme in filmes | filter : buscaFilme" ng-style="colorLine" ng-init="datetime = Date">
+                    <tr dir-paginate="filme in filmes | filter : buscaFilme | itemsPerPage : 3" ng-style="colorLine" ng-init="datetime = Date">
                         <td><input type="checkbox" ng-checked="filmes.selecionados"></td>
                         <td>{{filme.nome}}</td>
                         <td>{{filme.genero.nome}}</td>
@@ -144,6 +145,8 @@
                     </tbody>
                 </table>
                 <button type="button" class="btn btn-primary" ng-if="isFilmeSelecionado(filmes)" ng-click="removerTodos(filmes)">Excluir Todos</button>
+                <dir-pagination-controls boundary-links="true"></dir-pagination-controls>
+
             </div>
         </div>
     </div>
